@@ -22,53 +22,10 @@ export function renderHomeView(state) {
 
   return {
     html: `
-      <section class="toolbar glass-panel">
-        <div class="search-shell">
-          <input
-            id="prompt-search"
-            class="search-input"
-            type="search"
-            placeholder="Buscar por título, idea o estilo visual"
-          />
-        </div>
-      </section>
-
       <section class="prompt-grid" id="prompt-grid">
         ${prompts.map((prompt) => renderPromptCard(prompt, state.user)).join("")}
       </section>
-
-      <section class="empty-panel glass-panel hidden" id="empty-state">
-        <h2 class="section-title">No encontramos prompts con ese filtro</h2>
-        <p>Prueba con otra palabra, borra la búsqueda o cambia la categoría activa.</p>
-      </section>
     `,
-    bind: () => {
-      const searchInput = document.querySelector("#prompt-search");
-      const cards = Array.from(document.querySelectorAll("[data-prompt-card]"));
-      const emptyState = document.querySelector("#empty-state");
-
-      const applyFilters = () => {
-        const query = searchInput?.value.trim().toLowerCase() ?? "";
-        let visible = 0;
-
-        cards.forEach((card) => {
-          const title = card.dataset.title ?? "";
-          const tags = card.dataset.tags ?? "";
-          const shouldShow = !query || title.includes(query) || tags.includes(query);
-          card.classList.toggle("hidden", !shouldShow);
-          if (shouldShow) {
-            visible += 1;
-          }
-        });
-
-        emptyState?.classList.toggle("hidden", visible > 0);
-      };
-
-      searchInput?.addEventListener("input", applyFilters);
-
-      return () => {
-        searchInput?.removeEventListener("input", applyFilters);
-      };
-    },
+    bind: () => () => {},
   };
 }
